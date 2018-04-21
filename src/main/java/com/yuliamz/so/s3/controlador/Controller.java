@@ -52,7 +52,6 @@ public class Controller implements Initializable {
         checkSuspendidoListo.setSelected(false);
         numTiempo.setPlainText("");
         txtNombreProceso.setText("");
-        infoBloqueo.setVisible(false);
         errorNombre.setVisible(false);
     }
 
