@@ -19,12 +19,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
 /**
@@ -35,6 +33,7 @@ import javafx.scene.layout.Pane;
 public class Controller implements Initializable {
 
     ObservableList<Proceso> listaProcesos;
+    ObservableList<TablaVistaProcesos> listaReporte;
     AdministradorProcesos ap;
 
     @FXML private Pane panelProcesos, panelReportes;
@@ -44,8 +43,7 @@ public class Controller implements Initializable {
     @FXML private Label infoBloqueo, errorNombre;
     @FXML private TableView<Proceso> tablaProcesos;
     @FXML private TableView<TablaVistaProcesos> tablaReportes;
-    @FXML private TableColumn<Proceso, String> columnaNombre, columnaBloqueo,columnaSuspendidoBloqueado,columnaSuspendidoListo,columnaListos,columnaDespachar,columnaExpTiempo,columnaEjecucion,columnaESejecucionBloqueado,columnaBloqueado,columnaESBloqueadoListo,columnaSuspenderBloqueadoSuspender,columnaSuspendidoBloqueado2,columnaReanudarSuspendidoBloqueadoBloqueado,columnaESbloqueadoSuspendidoBloqueado,columnaSuspendidoListo2,columnaSuspenderEjecucionSuspendidoListo,columnaReanudarSuspendidoListoListo,columnaFin;
-    @FXML private TableColumn<Proceso, Integer> columnaTiempo;
+    @FXML private TableColumn<Proceso, String> columnaBloqueo,columnaSuspendidoBloqueado,columnaSuspendidoListo;
 
     @FXML
     void limpiar(ActionEvent event) {
@@ -115,7 +113,6 @@ public class Controller implements Initializable {
             ap = new AdministradorProcesos(new ArrayList<>(listaProcesos));
         try {
             ap.iniciarSecuencia();
-            ObservableList<TablaVistaProcesos> listReporte = FXCollections.observableArrayList();
             
             for (int i = 0; i < ap.getListos().size(); i++) {
                 TablaVistaProcesos procesosReporte = new TablaVistaProcesos();
@@ -134,9 +131,8 @@ public class Controller implements Initializable {
                 try {procesosReporte.setSuspenderEjecucionSuspendidoListo(ap.getSuspenderEjecucionSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
                 try {procesosReporte.setSuspendidoBloqueado(ap.getSuspendidoBloqueado().get(i).getNombre());} catch (Exception e) {}
                 try {procesosReporte.setSuspendidoListo(ap.getSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
-                listReporte.add(procesosReporte);
+                listaReporte.add(procesosReporte);
             }
-            tablaReportes.setItems(listReporte);
             mostrarReportes();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
@@ -148,13 +144,6 @@ public class Controller implements Initializable {
             alert.showAndWait();
         }
         }
-        
-        
-
-    }
-    
-    void incluir(){
-        
     }
 
     void mostrarReportes() {
@@ -204,34 +193,14 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listaProcesos = FXCollections.observableArrayList();
-        columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        columnaTiempo.setCellValueFactory(new PropertyValueFactory<>("tiempo"));
-        columnaBloqueo.setCellValueFactory(new PropertyValueFactory<>("isBloqueado"));
+        listaReporte = FXCollections.observableArrayList();
+        
         columnaBloqueo.setCellValueFactory(e -> {return new ReadOnlyStringWrapper(e.getValue().isBloqueado() ? "SI" : "NO");});
-        columnaSuspendidoBloqueado.setCellValueFactory(new PropertyValueFactory<>("isSuspendidoBloqueado"));
         columnaSuspendidoBloqueado.setCellValueFactory(e -> {return new ReadOnlyStringWrapper(e.getValue().isSuspendidoBloqueado() ? "SI" : "NO");});
-        columnaSuspendidoListo.setCellValueFactory(new PropertyValueFactory<>("isSuspendidoListo"));
         columnaSuspendidoListo.setCellValueFactory(e -> {return new ReadOnlyStringWrapper(e.getValue().isSuspendidoListo() ? "SI" : "NO");});
+        
         tablaProcesos.setItems(listaProcesos);
-        
-        //Tabla de reportes
-        
-        columnaListos.setCellValueFactory(new PropertyValueFactory<>("listo"));
-        columnaDespachar.setCellValueFactory(new PropertyValueFactory<>("despachar"));
-        columnaExpTiempo.setCellValueFactory(new PropertyValueFactory<>("expTiempo"));
-        columnaEjecucion.setCellValueFactory(new PropertyValueFactory<>("ejecucion"));
-        columnaESejecucionBloqueado.setCellValueFactory(new PropertyValueFactory<>("ESejecucionBloqueado"));
-        columnaBloqueado.setCellValueFactory(new PropertyValueFactory<>("bloqueado"));
-        columnaESBloqueadoListo.setCellValueFactory(new PropertyValueFactory<>("ESbloqueadoListo"));
-        columnaSuspenderBloqueadoSuspender.setCellValueFactory(new PropertyValueFactory<>("suspenderBloqueadoSuspendidoBloqueado"));
-        columnaSuspendidoBloqueado2.setCellValueFactory(new PropertyValueFactory<>("suspendidoBloqueado"));
-        columnaReanudarSuspendidoBloqueadoBloqueado.setCellValueFactory(new PropertyValueFactory<>("reanudarSuspendidoBloqueadoBloqueado"));
-        columnaESbloqueadoSuspendidoBloqueado.setCellValueFactory(new PropertyValueFactory<>("ESsuspendidoBloqueadoSuspendidoListo"));
-        columnaSuspendidoListo2.setCellValueFactory(new PropertyValueFactory<>("suspendidoListo"));
-        columnaSuspenderEjecucionSuspendidoListo.setCellValueFactory(new PropertyValueFactory<>("suspenderEjecucionSuspendidoListo"));
-        columnaReanudarSuspendidoListoListo.setCellValueFactory(new PropertyValueFactory<>("reanudarSuspendidoListoListo"));
-        columnaFin.setCellValueFactory(new PropertyValueFactory<>("fin"));
-        
+        tablaReportes.setItems(listaReporte);
         
         txtNombreProceso.setTooltip(new Tooltip("El nombre del proceso debe iniciar con una \"P\" seguido de un número identificador"));
         numTiempo.setTooltip(new Tooltip("El tiempo del proceso debe ser superior a 0 y no puede estar vacío"));

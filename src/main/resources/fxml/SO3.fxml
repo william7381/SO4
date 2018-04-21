@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import com.yuliamz.so.s3.Vista.*?>
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuliamz.so.s3.controlador.Controller">
     <children>
@@ -122,11 +123,31 @@
                 </Line>
                 <TableView fx:id="tablaProcesos" editable="true" layoutX="715.0" layoutY="121.0" prefHeight="352.0" prefWidth="632.0" style="-fx-font-size: 16;">
                     <columns>
-                        <TableColumn fx:id="columnaNombre" prefWidth="81.0" style="-fx-font-size: 16;" text="Nombre" />
-                        <TableColumn fx:id="columnaTiempo" prefWidth="71.0" style="-fx-font-size: 16;" text="Tiempo" />
-                        <TableColumn fx:id="columnaBloqueo" prefWidth="107.0" style="-fx-font-size: 16;" text="Bloqueo" />
-                        <TableColumn fx:id="columnaSuspendidoBloqueado" prefWidth="205.0" style="-fx-font-size: 16;" text="Suspendido-Bloqueado" />
-                        <TableColumn fx:id="columnaSuspendidoListo" prefWidth="167.0" style="-fx-font-size: 16;" text="Suspendido-Listo" />
+                        <TableColumn fx:id="columnaNombre" prefWidth="81.0" text="Nombre" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="nombre" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="columnaTiempo" prefWidth="71.0" text="Tiempo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="tiempo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="columnaBloqueo" prefWidth="107.0" text="Bloqueo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="isBloqueado" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="columnaSuspendidoBloqueado" prefWidth="205.0" text="Suspendido-Bloqueado" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="isSuspendidoBloqueado" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="columnaSuspendidoListo" prefWidth="167.0" text="Suspendido-Listo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="isSuspendidoListo" />
+                            </cellValueFactory>
+                        </TableColumn>
                     </columns>
                 </TableView>
                 <Button fx:id="btnEliminar" layoutX="930.0" layoutY="500.0" mnemonicParsing="false" onAction="#eliminarProceso" text="Eliminar fila seleccionada">
@@ -186,21 +207,81 @@
                 </Label>
                 <TableView fx:id="tablaReportes" style="-fx-font-size: 16;" layoutX="14.0" layoutY="43.0" prefHeight="606.0" prefWidth="1304.0">
                     <columns>
-                        <TableColumn  fx:id="columnaListos" prefWidth="46.0" text="Listos" />
-                        <TableColumn  fx:id="columnaDespachar" prefWidth="70.0" text="Despachar" />
-                        <TableColumn  fx:id="columnaExpTiempo" prefWidth="109.0" text="Expiración Tiempo" />
-                        <TableColumn  fx:id="columnaEjecucion" prefWidth="75.0" text="Ejecución" />
-                        <TableColumn  fx:id="columnaESejecucionBloqueado" prefWidth="75.0" text="E/S de Ejecución a Bloqueado" />
-                        <TableColumn fx:id="columnaBloqueado"  prefWidth="75.0" text="Bloqueado" />
-                        <TableColumn  fx:id="columnaESBloqueadoListo" prefWidth="75.0" text="E/S de Bloqueado a Listo" />
-                        <TableColumn  fx:id="columnaSuspenderBloqueadoSuspender" prefWidth="75.0" text="Suspender Bloqueado a Suspendido Bloqueado" />
-                        <TableColumn  fx:id="columnaSuspendidoBloqueado2" prefWidth="75.0" text="Suspendido Bloqueado" />
-                        <TableColumn  fx:id="columnaReanudarSuspendidoBloqueadoBloqueado" prefWidth="94.0" text="Reanudar de Suspendido Bloqueado a Bloqueado" />
-                        <TableColumn  fx:id="columnaESbloqueadoSuspendidoBloqueado" prefWidth="96.0" text="E/S de Suspendido Bloqueado a Suspendido Listo" />
-                        <TableColumn  fx:id="columnaSuspendidoListo2" prefWidth="91.0" text="Suspendido Listo" />
-                        <TableColumn  fx:id="columnaSuspenderEjecucionSuspendidoListo" prefWidth="160.0" text="Suspender de Ejecución a Suspendido Listo" />
-                        <TableColumn  fx:id="columnaReanudarSuspendidoListoListo" prefWidth="142.0" text="Reanudar de Suspendido Listo a Listo" />
-                        <TableColumn  fx:id="columnaFin" prefWidth="45.0" text="Fin" />
+                        <TableColumn  fx:id="columnaListos" prefWidth="46.0" text="Listos" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="listo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaDespachar" prefWidth="70.0" text="Despachar" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="despachar" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaExpTiempo" prefWidth="109.0" text="Expiración Tiempo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="expTiempo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaEjecucion" prefWidth="75.0" text="Ejecución" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="ejecucion" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaESejecucionBloqueado" prefWidth="75.0" text="E/S de Ejecución a Bloqueado" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="ESejecucionBloqueado" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="columnaBloqueado"  prefWidth="75.0" text="Bloqueado" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="bloqueado" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaESBloqueadoListo" prefWidth="75.0" text="E/S de Bloqueado a Listo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="ESbloqueadoListo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaSuspenderBloqueadoSuspendidoBloqueado" prefWidth="75.0" text="Suspender Bloqueado a Suspendido Bloqueado" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="suspenderBloqueadoSuspendidoBloqueado" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaSuspendidoBloqueado2" prefWidth="75.0" text="Suspendido Bloqueado" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="suspendidoBloqueado" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaReanudarSuspendidoBloqueadoBloqueado" prefWidth="94.0" text="Reanudar de Suspendido Bloqueado a Bloqueado" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="reanudarSuspendidoBloqueadoBloqueado" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaESsuspendidoBloqueadoSuspendidoListo" prefWidth="96.0" text="E/S de Suspendido Bloqueado a Suspendido Listo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="ESsuspendidoBloqueadoSuspendidoListo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaSuspendidoListo2" prefWidth="91.0" text="Suspendido Listo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="suspendidoListo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaSuspenderEjecucionSuspendidoListo" prefWidth="160.0" text="Suspender de Ejecución a Suspendido Listo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="suspenderEjecucionSuspendidoListo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaReanudarSuspendidoListoListo" prefWidth="142.0" text="Reanudar de Suspendido Listo a Listo" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="reanudarSuspendidoListoListo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn  fx:id="columnaFin" prefWidth="45.0" text="Fin" style="-fx-alignment: CENTER;" >
+                            <cellValueFactory>
+                                <PropertyValueFactory property="fin" />
+                            </cellValueFactory>
+                        </TableColumn>
                     </columns>
                 </TableView>
             </children>
