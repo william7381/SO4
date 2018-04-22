@@ -15,8 +15,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import com.yuliamz.so.s3.Vista.*?>
-
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuliamz.so.s3.controlador.Controller">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuliamz.so.s3.controlador.Controller">
     <children>
         <ToolBar prefHeight="40.0" prefWidth="1366.0">
             <items>
@@ -53,7 +52,7 @@
                 <DropShadow />
             </effect>
         </ToolBar>
-        <Pane fx:id="panelProcesos" layoutY="83.0" prefHeight="685.0" prefWidth="1366.0" visible="false">
+        <Pane fx:id="panelProcesos" layoutY="83.0" prefHeight="685.0" prefWidth="1366.0">
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" layoutY="-3.0" prefHeight="25.0" prefWidth="1366.0" text="Procesos">
                     <font>
@@ -91,7 +90,17 @@
                         <Font size="16.0" />
                     </font>
                 </MaskField>
-                <CheckBox fx:id="checkBloqueo" layoutX="292.0" layoutY="253.0" mnemonicParsing="false">
+                <CheckBox fx:id="checkBloqueo" layoutX="292.0" layoutY="253.0" mnemonicParsing="false" onAction="#actionCheckBloqueo">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </CheckBox>
+                <CheckBox fx:id="checkSuspendidoBloqueado" layoutX="292.0" layoutY="305.0" mnemonicParsing="false" onAction="#actionCheckSuspendidoBloqueado">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </CheckBox>
+                <CheckBox fx:id="checkSuspendidoListo" layoutX="293.0" layoutY="356.0" mnemonicParsing="false" onAction="#actionCheckSuspendidoListo">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -124,34 +133,50 @@
                 </Line>
                 <TableView fx:id="tablaProcesos" editable="true" layoutX="715.0" layoutY="121.0" prefHeight="352.0" prefWidth="632.0" style="-fx-font-size: 16;">
                     <columns>
-                        <TableColumn fx:id="columnaNombre" prefWidth="81.0" style="-fx-alignment: CENTER;" text="Nombre">
+                        <TableColumn fx:id="columnaNombre" prefWidth="81.0" sortable="false" style="-fx-alignment: CENTER;" text="Nombre">
                             <cellValueFactory>
                                 <PropertyValueFactory property="nombre" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaTiempo" prefWidth="71.0" style="-fx-alignment: CENTER;" text="Tiempo">
+                        <TableColumn fx:id="columnaTiempo" prefWidth="71.0" sortable="false" style="-fx-alignment: CENTER;" text="Tiempo">
                             <cellValueFactory>
                                 <PropertyValueFactory property="tiempo" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaBloqueo" prefWidth="107.0" style="-fx-alignment: CENTER;" text="Bloqueo">
+                        <TableColumn fx:id="columnaBloqueo" prefWidth="107.0" sortable="false" style="-fx-alignment: CENTER;" text="Bloqueo">
                             <cellValueFactory>
                                 <PropertyValueFactory property="isBloqueado" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaSuspendidoBloqueado" prefWidth="205.0" style="-fx-alignment: CENTER;" text="Suspendido-Bloqueado">
+                        <TableColumn fx:id="columnaSuspendidoBloqueado" prefWidth="205.0" sortable="false" style="-fx-alignment: CENTER;" text="Suspendido-Bloqueado">
                             <cellValueFactory>
                                 <PropertyValueFactory property="isSuspendidoBloqueado" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaSuspendidoListo" prefWidth="167.0" style="-fx-alignment: CENTER;" text="Suspendido-Listo">
+                        <TableColumn fx:id="columnaSuspendidoListo" prefWidth="167.0" sortable="false" style="-fx-alignment: CENTER;" text="Suspendido-Listo">
                             <cellValueFactory>
                                 <PropertyValueFactory property="isSuspendidoListo" />
                             </cellValueFactory>
                         </TableColumn>
                     </columns>
                 </TableView>
-                <Button fx:id="btnEliminar" layoutX="930.0" layoutY="500.0" mnemonicParsing="false" onAction="#eliminarProceso" text="Eliminar fila seleccionada">
+                <Button fx:id="btnEliminar" layoutX="835.0" layoutY="491.0" mnemonicParsing="false" onAction="#eliminarProceso" text="Eliminar fila seleccionada">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <effect>
+                        <DropShadow blurType="GAUSSIAN" height="18.03" offsetY="2.0" radius="7.032500000000001" width="12.1" />
+                    </effect>
+                </Button>
+            <Button fx:id="btnEliminarTodo" layoutX="1096.0" layoutY="491.0" mnemonicParsing="false" onAction="#eliminarTodosLosProceso" text="Eliminar todo">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="18.03" offsetY="2.0" radius="7.032500000000001" width="12.1" />
+               </effect>
+            </Button>
+                <Button fx:id="btnIniciar" layoutX="614.0" layoutY="545.0" mnemonicParsing="false" onAction="#iniciarProcesos" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),        radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);; -fx-background-insets: 0,1,2;; -fx-background-radius: 3,2,1;;" text="Iniciar procesos">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -169,37 +194,19 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnIniciar" layoutX="614.0" layoutY="545.0" mnemonicParsing="false" onAction="#iniciarProcesos" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),        radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);; -fx-background-insets: 0,1,2;; -fx-background-radius: 3,2,1;;" text="Iniciar procesos">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                    <effect>
-                        <DropShadow blurType="GAUSSIAN" height="18.03" offsetY="2.0" radius="7.032500000000001" width="12.1" />
-                    </effect>
-                </Button>
                 <Label layoutX="88.0" layoutY="304.0" text="Suspendido-Bloqueado">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <CheckBox fx:id="checkSuspendidoBloqueado" layoutX="292.0" layoutY="305.0" mnemonicParsing="false">
-                    <font>
-                        <Font size="16.0" />
-                    </font>
-                </CheckBox>
-                <Label layoutX="84.0" layoutY="356.0" text="Suspendido-Listo">
+                <Label layoutX="88.0" layoutY="355.0" text="Suspendido-Listo">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <CheckBox fx:id="checkSuspendidoListo" layoutX="289.0" layoutY="357.0" mnemonicParsing="false">
-                    <font>
-                        <Font size="16.0" />
-                    </font>
-                </CheckBox>
             </children>
         </Pane>
-        <Pane fx:id="panelReportes" layoutX="10.0" layoutY="93.0" prefHeight="685.0" prefWidth="1366.0">
+        <Pane fx:id="panelReportes" layoutX="10.0" layoutY="93.0" prefHeight="685.0" prefWidth="1366.0" visible="false">
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-9.0" layoutY="-13.0" prefHeight="25.0" prefWidth="1366.0" text="Reportes">
                     <font>
@@ -208,12 +215,12 @@
                 </Label>
                 <TableView fx:id="tablaReportes" layoutX="14.0" layoutY="43.0" prefHeight="606.0" prefWidth="1304.0" style="-fx-font-size: 16;">
                     <columns>
-                        <TableColumn fx:id="columnaListos" prefWidth="50.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Listos">
+                        <TableColumn fx:id="columnaListos" prefWidth="100.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Listos">
                             <cellValueFactory>
                                 <PropertyValueFactory property="listo" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaDespachar" prefWidth="85.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Despachar">
+                        <TableColumn fx:id="columnaDespachar" prefWidth="100.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Despachar">
                             <cellValueFactory>
                                 <PropertyValueFactory property="despachar" />
                             </cellValueFactory>
@@ -223,7 +230,7 @@
                                 <PropertyValueFactory property="expTiempo" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaEjecucion" prefWidth="77.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Ejecución">
+                        <TableColumn fx:id="columnaEjecucion" prefWidth="100.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Ejecución">
                             <cellValueFactory>
                                 <PropertyValueFactory property="ejecucion" />
                             </cellValueFactory>
@@ -233,7 +240,7 @@
                                 <PropertyValueFactory property="ESejecucionBloqueado" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaBloqueado" prefWidth="88.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Bloqueado">
+                        <TableColumn fx:id="columnaBloqueado" prefWidth="100.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Bloqueado">
                             <cellValueFactory>
                                 <PropertyValueFactory property="bloqueado" />
                             </cellValueFactory>
@@ -278,7 +285,7 @@
                                 <PropertyValueFactory property="reanudarSuspendidoListoListo" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="columnaFin" prefWidth="50.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Fin">
+                        <TableColumn fx:id="columnaFin" prefWidth="100.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Fin">
                             <cellValueFactory>
                                 <PropertyValueFactory property="fin" />
                             </cellValueFactory>

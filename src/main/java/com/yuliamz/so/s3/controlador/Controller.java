@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
@@ -24,6 +25,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
+
+//<?import com.yuliamz.so.s3.Vista.*?>
 
 /**
  * FXML Controller class
@@ -44,6 +47,25 @@ public class Controller implements Initializable {
     @FXML private TableView<Proceso> tablaProcesos;
     @FXML private TableView<TablaVistaProcesos> tablaReportes;
     @FXML private TableColumn<Proceso, String> columnaBloqueo,columnaSuspendidoBloqueado,columnaSuspendidoListo;
+    
+    @FXML
+    public void actionCheckBloqueo(ActionEvent event) {
+        if (checkSuspendidoBloqueado.isSelected()) {
+            checkSuspendidoBloqueado.setSelected(false);
+        }
+    }
+    
+    @FXML
+    public void actionCheckSuspendidoBloqueado(ActionEvent event) {
+        if (!checkBloqueo.isSelected()) {
+            checkBloqueo.setSelected(true);
+        }
+    }
+    
+    @FXML
+    public void actionCheckSuspendidoListo(ActionEvent event) {
+        
+    }
 
     @FXML
     void limpiar(ActionEvent event) {
@@ -109,39 +131,40 @@ public class Controller implements Initializable {
             alert.initOwner(panelProcesos.getScene().getWindow());
             alert.showAndWait();
         }else{
+            listaReporte.clear();
             ap = new AdministradorProcesos(new ArrayList<>(listaProcesos));
-        try {
-            ap.iniciarSecuencia();
-            
-            for (int i = 0; i < ap.getListos().size(); i++) {
-                TablaVistaProcesos procesosReporte = new TablaVistaProcesos();
-                try {procesosReporte.setBloqueado(ap.getBloqueados().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setDespachar(ap.getDespachados().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setESbloqueadoListo(ap.getESbloqueadoListo().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setESejecucionBloqueado(ap.getESejecucionBloqueado().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setESsuspendidoBloqueadoSuspendidoListo(ap.getESsuspendidoBloqueadoSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setEjecucion(ap.getEjecucion().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setExpTiempo(ap.getExpiracionTiempo().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setFin(ap.getFinalizados().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setListo(ap.getListos().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setReanudarSuspendidoBloqueadoBloqueado(ap.getReanudarSuspendidoBloqueadoBloqueado().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setReanudarSuspendidoListoListo(ap.getReanudarSuspendidoListoListo().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setSuspenderBloqueadoSuspendidoBloqueado(ap.getSuspenderBloqueadoSuspendidoBloqueado().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setSuspenderEjecucionSuspendidoListo(ap.getSuspenderEjecucionSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setSuspendidoBloqueado(ap.getSuspendidoBloqueado().get(i).getNombre());} catch (Exception e) {}
-                try {procesosReporte.setSuspendidoListo(ap.getSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
-                listaReporte.add(procesosReporte);
+            try {
+                ap.iniciarSecuencia();
+                
+                for (int i = 0; i < ap.getListos().size(); i++) {
+                    TablaVistaProcesos procesosReporte = new TablaVistaProcesos();
+                    try {procesosReporte.setBloqueado(ap.getBloqueados().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setDespachar(ap.getDespachados().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setESbloqueadoListo(ap.getESbloqueadoListo().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setESejecucionBloqueado(ap.getESejecucionBloqueado().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setESsuspendidoBloqueadoSuspendidoListo(ap.getESsuspendidoBloqueadoSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setEjecucion(ap.getEjecucion().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setExpTiempo(ap.getExpiracionTiempo().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setFin(ap.getFinalizados().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setListo(ap.getListos().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setReanudarSuspendidoBloqueadoBloqueado(ap.getReanudarSuspendidoBloqueadoBloqueado().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setReanudarSuspendidoListoListo(ap.getReanudarSuspendidoListoListo().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setSuspenderBloqueadoSuspendidoBloqueado(ap.getSuspenderBloqueadoSuspendidoBloqueado().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setSuspenderEjecucionSuspendidoListo(ap.getSuspenderEjecucionSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setSuspendidoBloqueado(ap.getSuspendidoBloqueado().get(i).getNombre());} catch (Exception e) {}
+                    try {procesosReporte.setSuspendidoListo(ap.getSuspendidoListo().get(i).getNombre());} catch (Exception e) {}
+                    listaReporte.add(procesosReporte);
+                }
+                mostrarReportes();
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error inesperado");
+                alert.setHeaderText("Ocurrió un error en la ejecución");
+                alert.setContentText("Asegurese que la información insertada sea correcta");
+                alert.initOwner(panelProcesos.getScene().getWindow());
+                alert.showAndWait();
             }
-            mostrarReportes();
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error inesperado");
-            alert.setHeaderText("Ocurrió un error en la ejecución");
-            alert.setContentText("Asegurese que la información insertada sea correcta");
-            alert.initOwner(panelProcesos.getScene().getWindow());
-            alert.showAndWait();
-        }
         }
     }
 
@@ -177,13 +200,26 @@ public class Controller implements Initializable {
     }
     
     @FXML
-    private void eliminarProceso(ActionEvent event) {
+    public void eliminarProceso(ActionEvent event) {
         if (tablaProcesos.getSelectionModel().getSelectedIndex() >= 0) {
-            tablaProcesos.getItems().remove(tablaProcesos.getSelectionModel().getFocusedIndex());
-        }else{
+            listaProcesos.remove(tablaProcesos.getSelectionModel().getFocusedIndex());
+        }else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("No se puede eliminar");
             alert.setHeaderText("Debe seleccionar el proceso que desea eliminar");
+            alert.initOwner(panelProcesos.getScene().getWindow());
+            alert.showAndWait();
+        }
+    }
+    
+    @FXML
+    public void eliminarTodosLosProceso(ActionEvent event) {
+        if (tablaProcesos.getItems().size() > 0) {
+            tablaProcesos.getItems().clear();
+        }else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("No se puede eliminar");
+            alert.setHeaderText("No hay procesos registrados");
             alert.initOwner(panelProcesos.getScene().getWindow());
             alert.showAndWait();
         }
