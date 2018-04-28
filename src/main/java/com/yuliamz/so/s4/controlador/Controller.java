@@ -66,7 +66,7 @@ public class Controller implements Initializable {
         txtTiempoProceso.setText("");
         txtTamanioProceso.setText("");
         comboBoxParticiones.getSelectionModel().selectFirst();
-        labelErrorParticion.setVisible(false);
+        labelErrorProceso.setVisible(false);
     }
 
     boolean validarCamposParticion(){
@@ -174,7 +174,7 @@ public class Controller implements Initializable {
             labelErrorProceso.setText("El nombre ya existe, por favor elija uno nuevo");
             labelErrorProceso.setVisible(true);
         }else {
-            labelErrorParticion.setVisible(false);
+            labelErrorProceso.setVisible(false);
         }
     }
     
@@ -190,11 +190,11 @@ public class Controller implements Initializable {
 
     @FXML
     void iniciarProcesos(ActionEvent event) {
-        if (listaProcesos.isEmpty()) {
+        if (listaParticiones.isEmpty()) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("No hay particiones");
             alert.setHeaderText("No existen particiones para la simulación");
-            alert.setContentText("Asegurese de ingresar al menos una(1) particiones antes de iniciar la simulación");
+            alert.setContentText("Debe ingresar al menos una(1) particion");
             alert.initOwner(panelProcesos.getScene().getWindow());
             alert.showAndWait();
         }else{
@@ -208,7 +208,7 @@ public class Controller implements Initializable {
                 tabPaneParticiones.getTabs().clear();
                 ArrayList<Particion> particiones = ap.getParticiones();
                 for (Particion particion : particiones) {
-                    tabPaneParticiones.getTabs().add(new TabParticion(particion));
+                    tabPaneParticiones.getTabs().add(new TabParticion(particion, tabPaneParticiones));
                 }
                 mostrarReportes();
             } catch (CloneNotSupportedException ex) {
@@ -326,26 +326,6 @@ public class Controller implements Initializable {
         listaParticiones = FXCollections.observableArrayList();
         listaProcesos = FXCollections.observableArrayList();
         listaReporte = FXCollections.observableArrayList();
-        
-        final Particion particion1 = new Particion("pp1", new BigInteger("10"));
-        listaParticiones.add(particion1);
-        
-        final Particion particion2 = new Particion("pp2", new BigInteger("10"));
-        listaParticiones.add(particion2);
-        
-        final Proceso proceso1 = new Proceso("p1", new BigInteger("11"), new BigInteger("10"), particion2);
-        listaProcesos.add(proceso1);
-        final Proceso proceso2 = new Proceso("p2", new BigInteger("4"), new BigInteger("10"), particion2);
-        listaProcesos.add(proceso2);
-        final Proceso proceso3 = new Proceso("p3", new BigInteger("9"), new BigInteger("5"), particion1);
-        listaProcesos.add(proceso3);
-        final Proceso proceso4 = new Proceso("p4", new BigInteger("7"), new BigInteger("10"), particion1);
-        listaProcesos.add(proceso4);
-        
-        particion2.getProcesos().add(proceso1);
-        particion2.getProcesos().add(proceso2);
-        particion1.getProcesos().add(proceso3);
-        particion1.getProcesos().add(proceso4);
         
         tablaParticiones.setItems(listaParticiones);
         tablaProcesos.setItems(listaProcesos);

@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,7 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class TabParticion extends Tab {
 
-    public TabParticion(Particion particion) {
+    public TabParticion(Particion particion, TabPane tabPane) {
         this.setText(particion.getNombre());
         
         ObservableList<TablaVistaParticiones> observableList = FXCollections.observableArrayList();
@@ -30,10 +31,13 @@ public class TabParticion extends Tab {
         TableView<TablaVistaParticiones> tableView = new TableView<>(observableList);
         
         TableColumn<TablaVistaParticiones, String> tableColumn1 = new TableColumn<>("Lista de Procesos");
+        tableColumn1.prefWidthProperty().bind(tableView.widthProperty().multiply(0.3));
         tableColumn1.setCellValueFactory(new PropertyValueFactory<>("proceso"));
         TableColumn<TablaVistaParticiones, String> tableColumn2 = new TableColumn<>("Procesados");
+        tableColumn2.prefWidthProperty().bind(tableView.widthProperty().multiply(0.3));
         tableColumn2.setCellValueFactory(new PropertyValueFactory<>("procesado"));
         TableColumn<TablaVistaParticiones, String> tableColumn3 = new TableColumn<>("No Procesados");
+        tableColumn3.prefWidthProperty().bind(tableView.widthProperty().multiply(0.3));
         tableColumn3.setCellValueFactory(new PropertyValueFactory<>("noProcesado"));
         
         tableView.getColumns().addAll(tableColumn1, tableColumn2, tableColumn3);
