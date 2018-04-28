@@ -1,16 +1,17 @@
-package com.yuliamz.so.s3.Modelo;
+package com.yuliamz.so.s4.Modelo;
+
+import java.math.BigInteger;
 
 @lombok.Data
 @lombok.AllArgsConstructor
 public class Proceso implements Cloneable {
     
-    String nombre;
-    int tiempo;
-    boolean isBloqueado;
-    boolean isSuspendidoBloqueado;
-    boolean isSuspendidoListo;
+    private String nombre;
+    private BigInteger tiempo;
+    private BigInteger tamanio;
+    private Particion particion;
     
-    protected Proceso clonar() throws CloneNotSupportedException {
+    public Proceso clonar() throws CloneNotSupportedException {
         return (Proceso) clone();
     }
 
@@ -21,7 +22,7 @@ public class Proceso implements Cloneable {
     
     @Override
     public String toString() {
-        return this.nombre + " " + this.tiempo + " " + this.isBloqueado;
+        return this.nombre + " " + this.tiempo + " ";
     }
     
 }

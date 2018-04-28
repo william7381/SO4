@@ -1,4 +1,4 @@
-package com.yuliamz.so.s3.Vista;
+package com.yuliamz.so.s4.Vista;
 
 import java.io.IOException;
 import javafx.application.Application;
@@ -17,10 +17,10 @@ public class FXMain extends Application {
     
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/SO3.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/SO4.fxml"));
         Scene scene = new Scene(root);
         
-        primaryStage.setTitle("Software 3");
+        primaryStage.setTitle("Software 4");
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
