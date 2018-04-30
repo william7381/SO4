@@ -10,17 +10,21 @@ public class AdministradorProcesos {
 
     private final ArrayList<Particion> particiones;
     private final ArrayList<Proceso> pilaProcesos;
+    private final ArrayList<Proceso> totalProcesados;
+    private final ArrayList<Proceso> totalNoProcesados;
     
     public AdministradorProcesos(ArrayList<Particion> listaParticiones) throws CloneNotSupportedException {
-        particiones = new ArrayList<>();
+        this.particiones = new ArrayList<>();
         for (Particion particion : listaParticiones) {
             Particion particionActual = particion.clonar();
-            particiones.add(particionActual);
+            this.particiones.add(particionActual);
             for (Proceso proceso : particion.getProcesos()) {
                 particionActual.getProcesos().add(proceso.clonar());
             }
         }
-        pilaProcesos = new ArrayList<>();
+        this.pilaProcesos = new ArrayList<>();
+        this.totalProcesados = new ArrayList<>();
+        this.totalNoProcesados = new ArrayList<>();
     }
 
     public void iniciarSecuencia() throws CloneNotSupportedException {
@@ -32,7 +36,7 @@ public class AdministradorProcesos {
                 auxParticiones.remove(particionActual);
             }else {
                 procesarParticion(particionActual);
-                if (particionActual.getIndex() == particionActual.getProcesos().size()) {
+                if (particionActual.getIndex() >= particionActual.getProcesos().size()) {
                     auxParticiones.remove(particionActual);
                 }
             }
@@ -42,9 +46,10 @@ public class AdministradorProcesos {
 
     private void procesarParticion(Particion particionActual) throws CloneNotSupportedException {
         Proceso procesoActual = particionActual.getProcesos().get(particionActual.getIndex());
-        if (procesoActual.getTamanio().compareTo(particionActual.getTamanio()) == 1) {
+        if (procesoActual.getTamanio().compareTo(particionActual.getTamanio()) > 0) {
             particionActual.getNoProcesados().add(procesoActual);
             particionActual.setIndex(particionActual.getIndex() + 1);
+            this.totalNoProcesados.add(procesoActual);
             return;
         }
         pilaProcesos.add(procesoActual.clonar());
@@ -54,6 +59,7 @@ public class AdministradorProcesos {
             particionActual.getProcesados().add(procesoActual);
             procesoActual.setTiempo(BigInteger.ZERO);
             particionActual.setIndex(particionActual.getIndex() + 1);
+            this.totalProcesados.add(procesoActual);
         }
     }
 }

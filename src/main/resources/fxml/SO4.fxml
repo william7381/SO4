@@ -11,16 +11,18 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuliamz.so.s4.controlador.Controller">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuliamz.so.s4.controlador.Controller">
     <children>
         <ToolBar prefHeight="40.0" prefWidth="1366.0">
             <items>
-                <Button fx:id="btnProcesos" mnemonicParsing="false" onAction="#procesos" text="Procesos">
+                <Button fx:id="btnProcesos" mnemonicParsing="false" onAction="#procesos" text="Particiones">
                     <font>
                         <Font name="System Bold" size="22.0" />
                     </font>
@@ -35,14 +37,17 @@
                         <Font name="System Bold" size="33.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnAcercaDe" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onAction="#acercaDe" text="Acerca de">
+                <Button fx:id="btnAcercaDe" layoutX="140.0" layoutY="10.0" mnemonicParsing="false" onAction="#acercaDe" prefHeight="48.0" prefWidth="100.0" text="Acerca de">
                     <font>
-                        <Font name="System Bold" size="22.0" />
+                        <Font name="System Bold" size="19.0" />
                     </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
                 </Button>
-                <Button fx:id="btnSalir" layoutX="326.0" layoutY="10.0" mnemonicParsing="false" onAction="#salir" text="Salir">
+                <Button fx:id="btnSalir" layoutX="313.0" layoutY="10.0" mnemonicParsing="false" onAction="#salir" text="Salir">
                     <font>
-                        <Font name="System Bold" size="22.0" />
+                        <Font name="System Bold" size="21.0" />
                     </font>
                     <opaqueInsets>
                         <Insets />
@@ -157,7 +162,7 @@
                   <DropShadow blurType="GAUSSIAN" height="18.03" offsetY="2.0" radius="7.032500000000001" width="12.1" />
                </effect>
             </Button>
-            <Button fx:id="btnEliminarTodoParticiones" layoutX="382.0" layoutY="577.0" mnemonicParsing="false" onAction="#eliminarTodosLosParticion" text="Eliminar todo">
+            <Button fx:id="btnEliminarTodoParticiones" layoutX="382.0" layoutY="577.0" mnemonicParsing="false" onAction="#eliminarTodasLasParticiones" text="Eliminar todo">
                <font>
                   <Font size="18.0" />
                </font>
@@ -175,17 +180,17 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtNombreProceso" layoutX="984.0" layoutY="77.0" onKeyReleased="#validarNombreProceso" prefHeight="25.0" prefWidth="185.0" promptText="Nombre de particion">
+            <TextField fx:id="txtNombreProceso" layoutX="984.0" layoutY="77.0" onKeyReleased="#validarNombreProceso" prefHeight="25.0" prefWidth="185.0" promptText="Nombre de proceso">
                <font>
                   <Font size="16.0" />
                </font>
             </TextField>
-            <TextField fx:id="txtTiempoProceso" layoutX="984.0" layoutY="117.0" prefHeight="25.0" prefWidth="185.0" promptText="Tamaño de particion">
+            <TextField fx:id="txtTiempoProceso" layoutX="984.0" layoutY="117.0" prefHeight="25.0" prefWidth="185.0" promptText="Tiempo de proceso">
                <font>
                   <Font size="16.0" />
                </font>
             </TextField>
-            <TextField fx:id="txtTamanioProceso" layoutX="985.0" layoutY="158.0" prefHeight="25.0" prefWidth="185.0" promptText="Tamaño de particion">
+            <TextField fx:id="txtTamanioProceso" layoutX="985.0" layoutY="158.0" prefHeight="25.0" prefWidth="185.0" promptText="Tamaño de proceso">
                <font>
                   <Font size="16.0" />
                </font>
@@ -259,7 +264,7 @@
                   <DropShadow blurType="GAUSSIAN" height="18.03" offsetY="2.0" radius="7.032500000000001" width="12.1" />
                </effect>
             </Button>
-            <Button fx:id="btnEliminarTodoProceso" layoutX="1120.0" layoutY="594.0" mnemonicParsing="false" onAction="#eliminarTodosLosProceso" text="Eliminar todo">
+            <Button fx:id="btnEliminarTodoProceso" layoutX="1120.0" layoutY="594.0" mnemonicParsing="false" onAction="#eliminarTodosLosProcesos" text="Eliminar todo">
                <font>
                   <Font size="18.0" />
                </font>
@@ -274,6 +279,36 @@
             </Label>
             </children>
         </Pane>
+      <Pane fx:id="panelCargando" prefHeight="652.0" prefWidth="1366.0" style="-fx-background-color: #ffffff;" visible="false">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="465.0" layoutY="128.0" prefHeight="30.0" prefWidth="409.0" text="Cargando...">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="182.0" fitWidth="282.0" layoutX="531.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image/animation.gif" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="465.0" layoutY="445.0" prefHeight="30.0" prefWidth="409.0" text="por favor espere">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnCancelar" layoutX="617.0" layoutY="557.0" mnemonicParsing="false" onAction="#cancelarProcesos" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),        radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);; -fx-background-insets: 0,1,2;; -fx-background-radius: 3,2,1;;" text="Cancelar">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="18.03" offsetY="2.0" radius="7.032500000000001" width="12.1" />
+               </effect>
+            </Button>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Pane>
         <Pane fx:id="panelReportes" layoutX="10.0" layoutY="93.0" prefHeight="685.0" prefWidth="1366.0" visible="false">
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-9.0" layoutY="-13.0" prefHeight="25.0" prefWidth="1366.0" text="Reportes">
@@ -310,7 +345,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <TabPane fx:id="tabPaneParticiones" layoutX="623.0" layoutY="106.0" prefHeight="414.0" prefWidth="555.0" tabClosingPolicy="UNAVAILABLE" />
+            <TabPane fx:id="tabPaneParticiones" layoutX="623.0" layoutY="106.0" prefHeight="414.0" prefWidth="555.0" style="-fx-padding: 1; -fx-background-color: gray, -fx-control-inner-background; -fx-background-insets: 0, 1;" tabClosingPolicy="UNAVAILABLE" />
             </children>
         </Pane>
     </children>

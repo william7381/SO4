@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,8 +44,10 @@ public class Controller implements Initializable {
     private ObservableList<Proceso> listaProcesos;
     private ObservableList<Proceso> listaReporte;
     private AdministradorProcesos ap;
+    private Thread thread;
+    private BigInteger tiempoGeneral = BigInteger.ZERO;
 
-    @FXML private Pane panelProcesos, panelReportes;
+    @FXML private Pane panelProcesos, panelReportes, panelCargando;
     @FXML private TextField txtNombreParticion, txtTamanioParticion, txtNombreProceso, txtTiempoProceso, txtTamanioProceso;
     @FXML private ComboBox<Particion> comboBoxParticiones;
     @FXML private Label labelErrorParticion, labelErrorProceso;
@@ -155,6 +159,7 @@ public class Controller implements Initializable {
             Proceso proceso = new Proceso(nombre, tiempo, tamanio, particion);
             listaProcesos.add(proceso);
             particion.getProcesos().add(proceso);
+            tiempoGeneral = tiempoGeneral.add(tiempo);
             limpiarProceso(event);
         }
     }
@@ -187,7 +192,15 @@ public class Controller implements Initializable {
             labelErrorParticion.setVisible(false);
         }
     }
-
+    
+    @FXML
+    void cancelarProcesos(ActionEvent event) {
+        try {thread.stop();} catch (Exception e) {}
+        btnReportes.setDisable(true);
+        panelCargando.setVisible(false);
+        mostrarProcesos();
+    }
+    
     @FXML
     void iniciarProcesos(ActionEvent event) {
         if (listaParticiones.isEmpty()) {
@@ -198,37 +211,64 @@ public class Controller implements Initializable {
             alert.initOwner(panelProcesos.getScene().getWindow());
             alert.showAndWait();
         }else{
-            btnReportes.setDisable(false);
-            listaReporte.clear();
-            try {
-                ap = new AdministradorProcesos(new ArrayList<>(listaParticiones));
-                listaParticiones.forEach(e -> e.clear());
-                ap.iniciarSecuencia();
-                listaReporte.addAll(ap.getPilaProcesos());
-                tabPaneParticiones.getTabs().clear();
-                ArrayList<Particion> particiones = ap.getParticiones();
-                for (Particion particion : particiones) {
-                    tabPaneParticiones.getTabs().add(new TabParticion(particion, tabPaneParticiones));
-                }
-                mostrarReportes();
-            } catch (CloneNotSupportedException ex) {
-                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error inesperado");
-                alert.setHeaderText("Ocurrió un error en la ejecución");
-                alert.setContentText("Asegurese que la información insertada sea correcta");
-                alert.initOwner(panelProcesos.getScene().getWindow());
-                alert.showAndWait();
+            if (tiempoGeneral.compareTo(new BigInteger("10000000")) >= 0) {
+                mostrarPanelCargando();
             }
+            this.thread = new Thread(() -> {
+                try {
+                    listaReporte.clear();
+                    ap = new AdministradorProcesos(new ArrayList<>(listaParticiones));
+                    listaParticiones.forEach(e -> e.clear());
+                    ap.iniciarSecuencia();
+                    listaReporte.addAll(ap.getPilaProcesos());
+                    mostrarReporteEnTabs();
+                    mostrarReportes();
+                    btnReportes.setDisable(false);
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error inesperado");
+                    alert.setHeaderText("Ocurrió un error en la ejecución");
+                    alert.setContentText("Asegurese que la información insertada sea correcta");
+                    alert.initOwner(panelProcesos.getScene().getWindow());
+                    alert.showAndWait();
+                }
+            });
+            thread.start();
         }
     }
 
+    private void mostrarReporteEnTabs() {
+        Platform.runLater(() -> {
+            tabPaneParticiones.getTabs().clear();
+        });
+        ArrayList<Particion> particiones = ap.getParticiones();
+        for (Particion particion : particiones) {
+            Platform.runLater(() -> {
+                tabPaneParticiones.getTabs().add(new TabParticion(particion, tabPaneParticiones));
+            });
+        }
+        TabParticion tabParticion = new TabParticion("Total");
+        tabParticion.crearDesde(new ArrayList<Proceso>(this.listaProcesos), this.ap.getTotalProcesados(), this.ap.getTotalNoProcesados());
+        Platform.runLater(() -> {
+            tabPaneParticiones.getTabs().add(tabParticion);
+        });
+    }
+
     void mostrarReportes() {
+        panelCargando.setVisible(false);
         panelProcesos.setVisible(false);
         panelReportes.setVisible(true);
     }
+    
+    void mostrarPanelCargando() {
+        panelReportes.setVisible(false);
+        panelProcesos.setVisible(false);
+        panelCargando.setVisible(true);
+    }
 
     void mostrarProcesos() {
+        panelCargando.setVisible(false);
         panelReportes.setVisible(false);
         panelProcesos.setVisible(true);
     }
@@ -259,6 +299,7 @@ public class Controller implements Initializable {
         if (tablaProcesos.getSelectionModel().getSelectedIndex() >= 0) {
             Proceso proceso = listaProcesos.remove(tablaProcesos.getSelectionModel().getFocusedIndex());
             proceso.getParticion().getProcesos().remove(proceso);
+            tiempoGeneral = tiempoGeneral.subtract(proceso.getTiempo());
         }else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("No se puede eliminar");
@@ -271,7 +312,11 @@ public class Controller implements Initializable {
     @FXML
     public void eliminarParticion(ActionEvent event) {
         if (tablaParticiones.getSelectionModel().getSelectedIndex() >= 0) {
-            listaParticiones.remove(tablaParticiones.getSelectionModel().getFocusedIndex());
+            Particion particion = listaParticiones.remove(tablaParticiones.getSelectionModel().getFocusedIndex());
+            for (Proceso proceso : particion.getProcesos()) {
+                listaProcesos.remove(proceso);
+                tiempoGeneral = tiempoGeneral.subtract(proceso.getTiempo());
+            }
         }else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("No se puede eliminar");
@@ -282,7 +327,7 @@ public class Controller implements Initializable {
     }
     
     @FXML
-    public void eliminarTodosLosParticion(ActionEvent event) {
+    public void eliminarTodasLasParticiones(ActionEvent event) {
         if (tablaParticiones.getItems().size() > 0) {
             Alert alert1 = new Alert(AlertType.CONFIRMATION);
             alert1.setTitle("Eliminar particiones");
@@ -290,8 +335,10 @@ public class Controller implements Initializable {
             alert1.initOwner(panelProcesos.getScene().getWindow());
             alert1.showAndWait();
             if (alert1.getResult().getButtonData().isDefaultButton()) {
-                tablaParticiones.getItems().clear();
+                listaProcesos.clear();
+                listaParticiones.clear();
             }
+            tiempoGeneral = BigInteger.ZERO;
         }else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("No se puede eliminar");
@@ -302,7 +349,7 @@ public class Controller implements Initializable {
     }
     
     @FXML
-    public void eliminarTodosLosProceso(ActionEvent event) {
+    public void eliminarTodosLosProcesos(ActionEvent event) {
         if (tablaProcesos.getItems().size() > 0) {
             Alert alert1 = new Alert(AlertType.CONFIRMATION);
             alert1.setTitle("Eliminar procesos");
@@ -310,8 +357,12 @@ public class Controller implements Initializable {
             alert1.initOwner(panelProcesos.getScene().getWindow());
             alert1.showAndWait();
             if (alert1.getResult().getButtonData().isDefaultButton()) {
-                tablaProcesos.getItems().clear();
+                for (Particion particion : listaParticiones) {
+                    particion.getProcesos().clear();
+                }
+                listaProcesos.clear();
             }
+            tiempoGeneral = BigInteger.ZERO;
         }else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("No se puede eliminar");
