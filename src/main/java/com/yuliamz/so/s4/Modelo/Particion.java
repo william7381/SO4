@@ -11,7 +11,8 @@ public class Particion implements Cloneable {
     private BigInteger tamanio;
     private ArrayList<Proceso> procesos;
     private int index;
-//    private ArrayList<Proceso> ejecuciones;
+    private ArrayList<Proceso> listos;
+    private ArrayList<Proceso> ejecutados;
     private ArrayList<Proceso> procesados;
     private ArrayList<Proceso> noProcesados;
 
@@ -20,6 +21,8 @@ public class Particion implements Cloneable {
         this.tamanio = tamanio;
         this.index = 0;
         this.procesos = new ArrayList<>();
+        this.listos = new ArrayList<>();
+        this.ejecutados = new ArrayList<>();
         this.procesados = new ArrayList<>();
         this.noProcesados = new ArrayList<>();
     }
@@ -42,8 +45,10 @@ public class Particion implements Cloneable {
 
     public void clear() {
         this.index = 0;
+        this.listos.clear();
+        this.ejecutados.clear();
         this.procesados.clear();
-        this.noProcesados.clear();;
+        this.noProcesados.clear();
     }
     
 }

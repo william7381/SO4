@@ -7,9 +7,11 @@ import com.yuliamz.so.s4.Vista.TabParticion;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,6 +26,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -48,14 +51,27 @@ public class Controller implements Initializable {
     private BigInteger tiempoGeneral = BigInteger.ZERO;
 
     @FXML private Pane panelProcesos, panelReportes, panelCargando;
-    @FXML private TextField txtNombreParticion, txtTamanioParticion, txtNombreProceso, txtTiempoProceso, txtTamanioProceso;
+    @FXML private TextField txtNombreParticion, txtTamanioParticion, txtNombreProceso, txtTiempoProceso, txtTamanioProceso, txtBuscarParticion;
     @FXML private ComboBox<Particion> comboBoxParticiones;
-    @FXML private Label labelErrorParticion, labelErrorProceso;
+    @FXML private Label labelErrorParticion, labelErrorProceso, labelErrorBuscarParticion;
     @FXML private Button btnReportes;
     @FXML private TableView<Proceso> tablaProcesos;
     @FXML private TableView<Particion> tablaParticiones;
     @FXML private TableView<Proceso> tablaReportes;
     @FXML private TabPane tabPaneParticiones;
+    
+    @FXML
+    void buscarParticion(ActionEvent event) {
+        String text = txtBuscarParticion.getText();
+        Stream<Tab> filter = tabPaneParticiones.getTabs().stream().filter(e -> e.getText().equals(text));
+        try {
+            Tab tab = filter.findFirst().get();
+            tabPaneParticiones.getSelectionModel().select(tab);
+            labelErrorBuscarParticion.setVisible(false);
+        } catch (Exception e) {
+            labelErrorBuscarParticion.setVisible(true);
+        }
+    }
     
     @FXML
     void limpiarParticion(ActionEvent event) {
@@ -75,7 +91,7 @@ public class Controller implements Initializable {
 
     boolean validarCamposParticion(){
         if(txtNombreParticion.getText().replace(" ", "").isEmpty()){
-            labelErrorParticion.setText("El nombre del proceso no puede estar vacío");
+            labelErrorParticion.setText("El nombre de la particion no puede estar vacío");
             labelErrorParticion.setVisible(true);
             return false;
         }
@@ -85,12 +101,12 @@ public class Controller implements Initializable {
             return false;
         }
         if(txtTamanioParticion.getText().isEmpty()){
-            labelErrorParticion.setText("El tiempo del proceso no puede estar vacío");
+            labelErrorParticion.setText("El tiempo de la particion no puede estar vacío");
             labelErrorParticion.setVisible(true);
             return false;
         }
         if(txtTamanioParticion.getText().replaceAll("0+", "0").equals("0")){
-            labelErrorParticion.setText("El tiempo del proceso debe ser superior a 0");
+            labelErrorParticion.setText("El tiempo de la particion debe ser superior a 0");
             labelErrorParticion.setVisible(true);
             return false;
         }

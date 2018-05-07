@@ -36,9 +36,14 @@ public class Test {
             for (Particion particion : particiones) {
                 System.out.println();
                 System.out.println(particion.getNombre());
-                mostrarLista(particion.getProcesados());
                 System.out.println("--- procesados");
+                mostrarLista(particion.getProcesados());
+                System.out.println("--- no procesados");
                 mostrarLista(particion.getNoProcesados());
+                System.out.println("--- listos");
+                mostrarLista(particion.getListos());
+                System.out.println("--- ejecutados");
+                mostrarLista(particion.getEjecutados());
             }
             System.out.println();
             System.out.println("Pila");

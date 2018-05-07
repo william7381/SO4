@@ -8,10 +8,11 @@ package com.yuliamz.so.s4.Modelo;
 @lombok.Data
 public class TablaVistaParticiones {
     public String proceso = "";
+    public String tiempo = "";
+    public String tamanio = "";
     public String procesado = "";
     public String noProcesado = "";
 
-    public TablaVistaParticiones() {
-    }
+    public TablaVistaParticiones() {}
     
 }

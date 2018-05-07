@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuliamz.so.s4.controlador.Controller">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuliamz.so.s4.controlador.Controller">
     <children>
         <ToolBar prefHeight="40.0" prefWidth="1366.0">
             <items>
@@ -135,6 +135,9 @@
                             </cellValueFactory>
                         </TableColumn>
                     </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
                 </TableView>
                 <Button fx:id="btnIniciar" layoutX="602.0" layoutY="620.0" mnemonicParsing="false" onAction="#iniciarProcesos" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),        radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);; -fx-background-insets: 0,1,2;; -fx-background-radius: 3,2,1;;" text="Iniciar procesos">
                     <font>
@@ -250,6 +253,9 @@
                      </cellValueFactory>
                   </TableColumn>
                </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
             </TableView>
             <Label alignment="CENTER" layoutX="701.0" layoutY="308.0" prefHeight="25.0" prefWidth="678.0" text="Lista de Procesos" textFill="#ff8503ce">
                <font>
@@ -316,7 +322,30 @@
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <TableView fx:id="tablaReportes" layoutX="55.0" layoutY="106.0" prefHeight="541.0" prefWidth="331.0" style="-fx-font-size: 16;">
+            <Line endX="1.0" endY="570.0" layoutX="456.0" layoutY="33.0" startY="30.0">
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="17.79" radius="12.1625" width="32.86" />
+               </effect>
+            </Line>
+            <TextField fx:id="txtBuscarParticion" layoutX="525.0" layoutY="61.0" onKeyReleased="#validarNombreParticion" prefHeight="25.0" prefWidth="185.0" promptText="Nombre de partición">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <Button fx:id="btnBuscarParticion" layoutX="726.0" layoutY="61.0" mnemonicParsing="false" onAction="#buscarParticion" text="Buscar Partición">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <effect>
+                  <DropShadow offsetY="3.0" />
+               </effect>
+            </Button>
+            <Label fx:id="labelErrorBuscarParticion" layoutX="900.0" layoutY="65.0" prefHeight="27.0" prefWidth="384.0" text="Partición no encontrada" textAlignment="RIGHT" textFill="#ab0d0d" visible="false">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+                <TableView fx:id="tablaReportes" layoutX="55.0" layoutY="106.0" prefHeight="541.0" prefWidth="331.0" style="-fx-font-size: 16; -fx-padding: 1; -fx-background-color: gray, -fx-control-inner-background; -fx-background-insets: 0, 1;">
                     <columns>
                         <TableColumn fx:id="columnaProcesos" prefWidth="165.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" text="Procesos">
                             <cellValueFactory>
@@ -329,8 +358,11 @@
                             </cellValueFactory>
                         </TableColumn>
                     </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
                 </TableView>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-466.0" layoutY="62.0" prefHeight="25.0" prefWidth="1366.0" text="Orden de ejecucion">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="62.0" prefHeight="30.0" prefWidth="285.0" text="Orden de ejecución">
                <font>
                   <Font size="24.0" />
                </font>
@@ -345,7 +377,12 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <TabPane fx:id="tabPaneParticiones" layoutX="623.0" layoutY="106.0" prefHeight="414.0" prefWidth="555.0" style="-fx-padding: 1; -fx-background-color: gray, -fx-control-inner-background; -fx-background-insets: 0, 1;" tabClosingPolicy="UNAVAILABLE" />
+            <TabPane fx:id="tabPaneParticiones" layoutX="525.0" layoutY="106.0" prefHeight="414.0" prefWidth="759.0" style="-fx-padding: 1; -fx-background-color: gray, -fx-control-inner-background; -fx-background-insets: 0, 1;" tabClosingPolicy="UNAVAILABLE" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="550.0" layoutY="542.0" prefHeight="79.0" prefWidth="708.0" text="* La columna &quot;No Procesados&quot; corresponde a aquellos procesos que exceden el tamaño de su partición" textAlignment="JUSTIFY" wrapText="true">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
             </children>
         </Pane>
     </children>

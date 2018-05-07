@@ -35,8 +35,12 @@ public class AdministradorProcesos {
             if (particionActual.getProcesos().size() == 0) {
                 auxParticiones.remove(particionActual);
             }else {
+                if (particionActual.getListos().size() == 0) {
+                    particionActual.getListos().addAll(particionActual.getProcesos());
+//                    System.out.println(particionActual.getNombre() + "   " +particionActual.getListos().size());
+                }
                 procesarParticion(particionActual);
-                if (particionActual.getIndex() >= particionActual.getProcesos().size()) {
+                if (particionActual.getIndex() >= particionActual.getListos().size()) {
                     auxParticiones.remove(particionActual);
                 }
             }
@@ -45,7 +49,7 @@ public class AdministradorProcesos {
     }
 
     private void procesarParticion(Particion particionActual) throws CloneNotSupportedException {
-        Proceso procesoActual = particionActual.getProcesos().get(particionActual.getIndex());
+        Proceso procesoActual = particionActual.getListos().get(particionActual.getIndex()).clonar();
         if (procesoActual.getTamanio().compareTo(particionActual.getTamanio()) > 0) {
             particionActual.getNoProcesados().add(procesoActual);
             particionActual.setIndex(particionActual.getIndex() + 1);
@@ -55,11 +59,14 @@ public class AdministradorProcesos {
         pilaProcesos.add(procesoActual.clonar());
         if (procesoActual.getTiempo().compareTo(QUANTUM) > 0) {
             procesoActual.setTiempo(procesoActual.getTiempo().subtract(QUANTUM));
+            particionActual.getEjecutados().add(procesoActual);
+            particionActual.getListos().add(procesoActual);
         }else {
             particionActual.getProcesados().add(procesoActual);
             procesoActual.setTiempo(BigInteger.ZERO);
-            particionActual.setIndex(particionActual.getIndex() + 1);
+            particionActual.getEjecutados().add(procesoActual);
             this.totalProcesados.add(procesoActual);
         }
+        particionActual.setIndex(particionActual.getIndex() + 1);
     }
 }
